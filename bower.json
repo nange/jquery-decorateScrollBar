@@ -1,0 +1,29 @@
+{
+  "name": "jquery-decorateScrollBar",
+  "version": "0.10.2",
+  "homepage": "https://github.com/hellocreep/jquery-decorateScrollBar",
+  "authors": [
+    "Lanceli"
+  ],
+  "description": "decorate brower defalt scollbar",
+  "keywords": [
+    "jquery",
+    "plugin",
+    "scollbar"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "1.10.2"
+  },
+  "devdependencies": {
+    "requirejs": "~2.1.9"
+  }
+}
