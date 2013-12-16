@@ -7,20 +7,19 @@
  * @author LanceLi  
  * Copyright 2013 AAXIS, Inc.
  */
-;(function() {
-  
-  // AMD support
-  (function(root, factory) {
-    if(typeof define ==='function' && define.amd) {
-      return define('decorateScrollBar', ['jquery'], function($) {
-        return factory($, root);
-      });
-    } else {
-      return factory(root.jQuery, root);
-    }
-  })(this, function($, root) {
 
-    var ScrollBar = function(element, options) {
+;(function(factory) {
+  if (typeof define === 'function' && define.amd) {
+    //AMD support
+    define(['jquery'], factory);
+  } else {
+    //Browser global
+    factory(jQuery);
+  }
+
+})(function($) {
+  
+  var ScrollBar = function(element, options) {
       this.$element = $(element);
       this.options = options;
       this.init();
@@ -776,5 +775,5 @@
 
       }
     }
-  });  
-}).call(this);
+
+});

@@ -3,7 +3,8 @@
   "version": "0.10.2",
   "homepage": "https://github.com/hellocreep/jquery-decorateScrollBar",
   "authors": [
-    "Lanceli"
+    "Lanceli",
+    "Liwen"
   ],
   "description": "decorate brower defalt scollbar",
   "keywords": [
