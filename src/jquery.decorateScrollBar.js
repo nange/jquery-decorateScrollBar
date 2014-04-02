@@ -2,14 +2,14 @@
  * ==============================
  * jquery plug for decorate the browser's default scrollbar
  * If you want to know more infomation about this, please go to
- * github: https://github.com/nange/basic-functions/tree/master/jquery-decorateScrollBar
+ * github: https://github.com/nange/jquery-decorateScrollBar
  * ==============================
+ *
  * @author LanceLi  
- * Copyright 2013 AAXIS, Inc.
  */
 
 ;(function(factory) {
-  if (typeof define === 'function' && define.amd) {
+  if (typeof define == 'function' && define.amd) {
     //AMD support
     define(['jquery'], factory);
   } else {
@@ -26,29 +26,24 @@
     };
     
     ScrollBar.DEFAULTS = {
-      contentId: '',
-      contentClassName: '',
-      sbYRailClassName: 'scrollbar-y-rail',  
-      sbYClassName: 'scrollbar-y',
-      sbYUpClickClassName: 'scrollbar-y-up-click',
-      sbYDownClickClassName: 'scrollbar-y-down-click',
-      sbXRailClassName: 'scrollbar-x-rail', 
-      sbXClassName: 'scrollbar-x',
-      sbXLeftClickClassName: 'scrollbar-x-left-click',
-      sbXRightClickClassName: 'scrollbar-x-right-click',
-      sbYRailWidth: 12,
-      sbXRailHeight: 12,
-      clickMoveSpace: 30,
-      mouseWheelSpeed: 50,
-      railClickMoveCoefficient: 2,
-      showClickButton: false
+      contentId                 : '',
+      contentClassName          : '',
+      sbYRailClassName          : 'scrollbar-y-rail',  
+      sbYClassName              : 'scrollbar-y',
+      sbXRailClassName          : 'scrollbar-x-rail', 
+      sbXClassName              : 'scrollbar-x',
+      sbYRailWidth              : 12,
+      sbXRailHeight             : 12,
+      clickMoveSpace            : 30,
+      mouseWheelSpeed           : 50,
+      railClickMoveCoefficient  : 2
     };
 
     ScrollBar.prototype = {
       //reset the constructor
       constructor: ScrollBar,
       //the html structure of scrollbarY
-      scrollbarYDOM: '<div><div><a></a></div><div></div><div><a></a></div></div>',
+      scrollbarYDOM: '<div><div></div></div>',
       //init the scroll bar
       init: function() {
         if (this.hasScrollBar()) {
@@ -59,10 +54,6 @@
 
             this.bindMousedownOnScrollbarY();
 
-            this.bindClickOnScrollbarYUp();
-
-            this.bindClickOnScrollbarYDown();
-
             this.bindClickOnScrollbarYRail();
 
             this.bindMouseWheel();
@@ -72,10 +63,6 @@
             this.initScrollbarX();
 
             this.bindMousedownOnScrollbarX();
-
-            this.bindClickOnScrollbarXLeft();
-
-            this.bindClickOnScrollbarXRight();
 
             this.bindClickOnScrollbarXRail();
           }
@@ -105,9 +92,9 @@
             $sbRail;
 
         $sbRail = $el.addClass(this.options.sbYRailClassName);
-        $sbRail.children(':nth-child(1)').addClass(this.options.sbYUpClickClassName);
-        $sbRail.children(':nth-child(2)').addClass(this.options.sbYClassName);
-        $sbRail.children(':nth-child(3)').addClass(this.options.sbYDownClickClassName);
+        
+        $sbRail.children(':nth-child(1)').addClass(this.options.sbYClassName);
+        
 
         $sbRail.appendTo(this.$element);
         $sbRail.css({
@@ -115,31 +102,11 @@
           width: this.options.sbYRailWidth
         });
         
-        if (!this.options.showClickButton) {
-          this.$element.find('.' + this.options.sbYUpClickClassName).css({
-            'width': 0,
-            'height': 0,
-            'margin': 0,
-            'border': 'none',
-            'display': 'none'
-          });
-          this.$element.find('.' + this.options.sbYDownClickClassName).css({
-            'width': 0,
-            'height': 0,
-            'margin': 0,
-            'border': 'none',
-            'display': 'none'
-          });
-
-        } else {
-          this.$element.find('.' + this.options.sbYDownClickClassName).css('bottom', 0);
-        }
-        
         this.$element.css('padding-right', $sbRail.outerWidth());
         
         this.$element.find('.' + this.options.sbYClassName).css({
           height: this.getScrollYHeight(),
-          top: this.getSbUpClickHeight()
+          top: 0
         });
         
       },
@@ -148,9 +115,8 @@
             $sbRail;
 
         $sbRail = $el.addClass(this.options.sbXRailClassName);
-        $sbRail.children(':nth-child(1)').addClass(this.options.sbXLeftClickClassName);
-        $sbRail.children(':nth-child(2)').addClass(this.options.sbXClassName);
-        $sbRail.children(':nth-child(3)').addClass(this.options.sbXRightClickClassName);
+        
+        $sbRail.children(':nth-child(1)').addClass(this.options.sbXClassName);
 
         $el.appendTo(this.$element);
         $el.css({
@@ -158,29 +124,11 @@
           width: this.getWapperWidth()
         });
 
-        if (!this.options.showClickButton) {
-          this.$element.find('.' + this.options.sbXLeftClickClassName).css({
-            'width': 0,
-            'height': 0,
-            'margin': 0,
-            'border': 'none',
-            'display': 'none'
-          });
-          this.$element.find('.' + this.options.sbXRightClickClassName).css({
-            'width': 0,
-            'height': 0,
-            'margin': 0,
-            'border': 'none',
-            'display': 'none'
-          });
-
-        }
-
         this.$element.css('padding-bottom', $sbRail.outerHeight());
 
         this.$element.find('.' + this.options.sbXClassName).css({
           width: this.getScrollXWidth(),
-          left: this.getSbLeftClickWidth()
+          left: 0
         });
 
       },
@@ -264,136 +212,7 @@
         });
 
       },
-      bindClickOnScrollbarYUp: function() {
-        var $element = this.$element,
-            _this = this;
-
-        $element.on('click.descrollbar', '.' + this.options.sbYUpClickClassName, function(event) {
-          event.preventDefault();
-          
-          var $this = $(this), 
-              originalScrollTop = _this.getContentEl().scrollTop(),
-              originalScrollBarTop = $this.next().position().top,
-              contentChangeY,
-              afterScrollTop,
-              afterScrollBarTop;
-
-          contentChangeY = (_this.options.clickMoveSpace / _this.getScrollYRailHeight()) * 
-              _this.getContentHeight(),
-          afterScrollTop = originalScrollTop - contentChangeY,
-          afterScrollBarTop = originalScrollBarTop - _this.options.clickMoveSpace;
-          
-          if (afterScrollTop >= 0) {
-            _this.getContentEl().scrollTop(afterScrollTop);
-            
-            $this.next().css('top', afterScrollBarTop);
-
-          } else {
-            _this.getContentEl().scrollTop(0);
-            
-            $this.next().css('top', _this.getSbUpClickHeight());
-          }
-
-        });
-      },
-      bindClickOnScrollbarXLeft: function() {
-        var $element = this.$element,
-            _this = this;
-
-        $element.on('click.descrollbar', '.' + this.options.sbXLeftClickClassName, function(event) {
-          event.preventDefault();
-          
-          var $this = $(this), 
-              originalScrollLeft = _this.getContentEl().scrollLeft(),
-              originalScrollBarLeft = $this.next().position().left,
-              contentChangeX,
-              afterScrollLeft,
-              afterScrollBarLeft;
-
-          contentChangeX = (_this.options.clickMoveSpace / _this.getScrollXRailWidth()) * 
-              _this.getContentWidth(),
-          afterScrollLeft = originalScrollLeft - contentChangeX,
-          afterScrollBarLeft = originalScrollBarLeft - _this.options.clickMoveSpace;
-          
-          if (afterScrollLeft >= 0) {
-            _this.getContentEl().scrollLeft(afterScrollLeft);
-            
-            $this.next().css('left', afterScrollBarLeft);
-
-          } else {
-            _this.getContentEl().scrollLeft(0);
-            
-            $this.next().css('left', _this.getSbLeftClickWidth());
-          }
-
-        });
-      },
-      bindClickOnScrollbarYDown: function() {
-        var $element = this.$element,
-            _this = this;
-
-        $element.on('click.descrollbar', '.' + this.options.sbYDownClickClassName, function(event) {
-
-          var $this = $(this), 
-              maxScrollTop = _this.getMaxScrollTop(),
-              originalScrollTop = _this.getContentEl().scrollTop(),
-              originalScrollBarTop = $this.prev().position().top,
-              contentChangeY,
-              afterScrollTop,
-              afterScrollBarTop;
-
-          contentChangeY = (_this.options.clickMoveSpace / _this.getScrollYRailHeight()) * 
-              _this.getContentHeight();
-          afterScrollTop = originalScrollTop + contentChangeY;
-          afterScrollBarTop = originalScrollBarTop + _this.options.clickMoveSpace;
-          
-          if (afterScrollTop <= maxScrollTop) {
-            _this.getContentEl().scrollTop(afterScrollTop);
-            
-            $this.prev().css('top', afterScrollBarTop);
-
-          } else {
-            _this.getContentEl().scrollTop(maxScrollTop);
-            
-            $this.prev().css('top', _this.getScrollYRailHeight() - _this.getScrollYHeight() + 
-              _this.getSbUpClickHeight());
-          }
-
-        });
-      },
-      bindClickOnScrollbarXRight: function() {
-        var $element = this.$element,
-            _this = this;
-
-        $element.on('click.descrollbar', '.' + this.options.sbXRightClickClassName, function(event) {
-
-          var $this = $(this), 
-              maxScrollLeft = _this.getMaxScrollLeft(),
-              originalScrollLeft = _this.getContentEl().scrollLeft(),
-              originalScrollBarLeft = $this.prev().position().left,
-              contentChangeX,
-              afterScrollLeft,
-              afterScrollBarLeft;
-
-          contentChangeX = (_this.options.clickMoveSpace / _this.getScrollXRailWidth()) * 
-              _this.getContentWidth();
-          afterScrollLeft = originalScrollLeft + contentChangeX;
-          afterScrollBarLeft = originalScrollBarLeft + _this.options.clickMoveSpace;
-          
-          if (afterScrollLeft <= maxScrollLeft) {
-            _this.getContentEl().scrollLeft(afterScrollLeft);
-            
-            $this.prev().css('left', afterScrollBarLeft);
-
-          } else {
-            _this.getContentEl().scrollLeft(maxScrollLeft);
-            
-            $this.prev().css('left', _this.getScrollXRailWidth() - _this.getScrollXWidth() + 
-              _this.getSbLeftClickWidth());
-          }
-
-        });
-      },
+      
       bindClickOnScrollbarYRail: function() {
         var $element = this.$element,
             _this = this;
@@ -430,7 +249,7 @@
               } else {
                 _this.getContentEl().scrollTop(0);
             
-                $scrollbarY.css('top', _this.getSbUpClickHeight());
+                $scrollbarY.css('top', 0);
               }
 
             } else if (pageY > sbYBtmOffset) {
@@ -446,8 +265,7 @@
               } else {
                 _this.getContentEl().scrollTop(maxScrollTop);
             
-                $scrollbarY.css('top', _this.getScrollYRailHeight() - _this.getScrollYHeight() + 
-                  _this.getSbUpClickHeight());
+                $scrollbarY.css('top', _this.getScrollYRailHeight() - _this.getScrollYHeight());
               }
 
             }
@@ -490,7 +308,7 @@
               } else {
                 _this.getContentEl().scrollLeft(0);
             
-                $scrollbarX.css('left', _this.getSbLeftClickWidth());
+                $scrollbarX.css('left', 0);
               }
 
             } else if (pageX > sbXRightOffset) {
@@ -506,8 +324,7 @@
               } else {
                 _this.getContentEl().scrollLeft(maxScrollLeft);
             
-                $scrollbarX.css('left', _this.getScrollXRailWidth() - _this.getScrollXWidth() + 
-                  _this.getSbLeftClickWidth());
+                $scrollbarX.css('left', _this.getScrollXRailWidth() - _this.getScrollXWidth());
               }
 
             }
@@ -544,7 +361,7 @@
             } else {
               _this.getContentEl().scrollTop(0);
               
-              $sbY.css('top', _this.getSbUpClickHeight());
+              $sbY.css('top', 0);
             }
           } else if (delta < 0) {
             
@@ -559,8 +376,7 @@
             } else {
               _this.getContentEl().scrollTop(maxScrollTop);
               
-              $sbY.css('top', _this.getScrollYRailHeight() - _this.getScrollYHeight() + 
-                _this.getSbUpClickHeight());
+              $sbY.css('top', _this.getScrollYRailHeight() - _this.getScrollYHeight());
             }
 
           }
@@ -583,9 +399,7 @@
         return (this.getWapperHeight() / this.getContentHeight()) * 
           this.getScrollYRailHeight();
       },
-      getScrollYWidth: function() {
-        return this.$element.find('.' + this.options.sbYRailClassName).outerWidth();
-      },
+      
       getScrollXWidth: function() {
         return (this.getWapperWidth() / this.getContentWidth()) * 
           this.getScrollXRailWidth();
@@ -608,34 +422,13 @@
         return this.getContentEl().prop('scrollWidth');
       },
       getScrollXRailWidth: function() {
-        if (this.options.showClickButton) {
-          return this.$element.find('.' + this.options.sbXRightClickClassName).position().left - 
-            this.$element.find('.' + this.options.sbXLeftClickClassName).outerWidth();
-        }
-
         return this.getWapperWidth();
-        
       },
       //get the rail height of scroll bar y which able to move
       getScrollYRailHeight: function() {
-        if (this.options.showClickButton) {
-          return this.$element.find('.' + this.options.sbYDownClickClassName).position().top - 
-            this.$element.find('.' + this.options.sbYUpClickClassName).outerHeight();
-        }
-        
         return this.getWapperHeight();
       },
-      //get the height of up click button
-      getSbUpClickHeight: function() {
-        return this.$element.find('.' + this.options.sbYUpClickClassName).outerHeight();
-      },
-      getSbLeftClickWidth: function() {
-        return this.$element.find('.' + this.options.sbXLeftClickClassName).outerWidth();
-      },
-      //get the height of down click button
-      getSbDownClickHeight: function() {
-        return this.$element.find('.' + this.options.sbYDownClickClassName).outerHeight();
-      },
+      
       //get the max scroll top
       getMaxScrollTop: function() {
         return this.getContentHeight() - this.getWapperHeight();
@@ -723,9 +516,9 @@
 
 
     $.fn.decorateScrollBar = function (option) {
-      var options = $.extend({}, ScrollBar.DEFAULTS, typeof option === 'object' && option);
     
       return this.each(function () {
+        var options = $.extend({}, ScrollBar.DEFAULTS, typeof option === 'object' && option);
         var $this = $(this);
         var data  = $this.data('descrollbar');
         var exports = {
