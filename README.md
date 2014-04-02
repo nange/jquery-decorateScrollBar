@@ -49,7 +49,6 @@ $('#wrapper').decorateScrollBar();
 
 ```
 $('#wrapper').decorateScrollBar({
-	showClickButton: true,
 	clickMoveSpace: 20,
   mouseWheelSpeed: 40
 });
@@ -97,24 +96,6 @@ The scrollbar Y class name.
 
 ----------------------------
 
-#### sbYUpClickClassName
-
-* **Type:** `string`
-* **Default:** `scrollbar-y-up-click`
-
-The scrollbar Y UpClick class name.
-
-----------------------------
-
-#### sbYDownClickClassName
-
-* **Type:** `string`
-* **Default:** `scrollbar-y-down-click`
-
-The scrollbar Y DownClick class name.
-
-----------------------------
-
 #### sbXRailClassName
 
 * **Type:** `string`
@@ -130,24 +111,6 @@ The scrollbar X Rail class name.
 * **Default:** `scrollbar-x`
 
 The scrollbar X class name.
-
-----------------------------
-
-#### sbXLeftClickClassName
-
-* **Type:** `string`
-* **Default:** `scrollbar-x-left-click`
-
-The scrollbar X LeftClick class name.
-
-----------------------------
-
-#### sbXRightClickClassName
-
-* **Type:** `string`
-* **Default:** `scrollbar-x-right-click`
-
-The scrollbar X RightClick class name.
 
 ----------------------------
 
@@ -196,15 +159,6 @@ The move space will be clickMoveSpace * railClickMoveCoefficient when click rail
 
 ----------------------------
 
-#### showClickButton
-
-* **Type:** `boolean`
-* **Default:** `false`
-
-determine whether the click button will be show.
-
-----------------------------
-
 ### Public Methods
 
 #### update
@@ -225,10 +179,3 @@ Manually remove all click event, relative dom, and delete the jquery cache.
 ```
 $('#wrapper').decorateScrollBar('destory');
 ```
-
-
-## Copyright
-
-Copyright 2013 [AAXIS](http://www.aaxiscommerce.com/ "AAXIS"), Inc
-
-![img](http://www.aaxiscommerce.com/wp-content/uploads/2013/08/AAXIS_logo1.png "AAXIS")
